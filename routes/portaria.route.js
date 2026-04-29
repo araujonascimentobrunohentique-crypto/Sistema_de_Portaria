@@ -26,5 +26,16 @@ router.get("/registro", portariaController.carregarPaginaRegistro);
 // Tela de relatório: exibe a tabela com o histórico cruzado (JOIN) de acessos
 router.get("/historico", portariaController.exibirHistorico);
 
+router.get("/", (req, res) => {
+    // Rota principal (home)
+    res.render("index", {
+        dados: lista, 
+        // Envia a lista de moradores para o EJS (usado na tabela)
+        query: req.query
+        // Envia os parâmetros da URL (ex: ?erro=... ou ?sucesso=...)
+        // Isso permite mostrar mensagens no front
+    });
+});
+
 // Exporta o router pra galera lá do index.js (arquivo principal) conseguir usar
 module.exports = router;

@@ -1,0 +1,31 @@
+ /* Fundo */
+        body { background-color: #fcfcfc; }
+
+        /* Card */
+        .card { border: none; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+
+        /* Select estilizado */
+        .form-select { border: none; background-color: #f8f9fa; }
+        .form-select:focus { box-shadow: none; background-color: #f1f3f5; }
+
+        /* Botão entrada */
+        .btn-entrada {
+            border: 1px solid #198754;
+            color: #198754;
+            background: transparent;
+        }
+        .btn-entrada:hover {
+            background: #198754;
+            color: white;
+        }
+
+        /* Botão saída */
+        .btn-saida {
+            border: 1px solid #dc3545;
+            color: #dc3545;
+            background: transparent;
+        }
+        .btn-saida:hover {
+            background: #dc3545;
+            color: white;
+        }

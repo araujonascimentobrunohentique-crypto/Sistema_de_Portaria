@@ -9,7 +9,7 @@ class portaria {
         const query = "select * from Moradores";
         const dados = await executarQuery(query);
         return dados;
-    }
+    } 
 
     // === CADASTRAR MORADOR ===
     // Salva o novo vizinho. O '?' evita que algum engraçadinho tente hackear via SQL Injection

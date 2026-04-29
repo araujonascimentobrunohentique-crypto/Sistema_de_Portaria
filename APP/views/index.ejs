@@ -6,81 +6,214 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portaria - Moradores</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+
 </head>
 
-<body class="bg-light">
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
-    <div class="container">
-        <a class="navbar-brand" href="/">Portaria Digital</a>
-        <div class="navbar-nav">
-            <a class="nav-link active" href="/">Moradores</a>
-            <a class="nav-link" href="/registro">Novo Registro</a>
-            <a class="nav-link" href="/historico">Histórico de Acessos</a>
-        </div>
+
+<body>
+
+    <!-- caso ele coloque as mesmas informaçoes, vai aparecer erro -->
+    <% if (query.erro) { %>
+    <div class="alert alert-danger alert-dismissible fade show" >
+        <%= query.erro %>
     </div>
-</nav>
+<% } %>
 
-    <div class="container mt-5">
-        <h1 class="mb-4">Sistema de Portaria</h1>
+<!-- caso não aparece sucesso -->
+<% if (query.sucesso) { %>
+    <div class="alert alert-success alert-dismissible fade show" >
+        <%= query.sucesso %>
+    </div>
+<% } %>
 
-        <div class="card mb-5">
-            <div class="card-header bg-primary text-white">Cadastrar Morador</div>
-            <div class="card-body">
-                <form action="/adicionar" method="POST" class="row g-3">
-                    <div class="col-md-6">
-                        <label class="form-label">Nome Completo</label>
-                        <input type="text" name="Nome" class="form-control" required>
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label">CPF</label>
-                        <input type="text" name="CPF" class="form-control" required>
-                    </div>
-                    <div class="col-md-2 d-flex align-items-end">
-                        <button type="submit" class="btn btn-success w-100">Salvar</button>
-                    </div>
-                </form>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm mb-5">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <span class="text-secondary">Portaria</span>Digital
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link active fw-semibold" href="/">Moradores</a>
+                <!-- text muted e um cinza suave fw-semibold e o peso da fonte -->
+                <a class="nav-link text-muted " href="/registro">Novo Registro</a>
+                <a class="nav-link text-muted" href="/historico">Histórico de Acessos</a>
             </div>
         </div>
+    </nav>
 
-        <div class="card">
-            <div class="card-header bg-secondary text-white">Pessoas Cadastradas</div>
-            <div class="card-body">
-                <table class="table table-striped table-hover">
-                    <thead>
+
+   <div class="container">
+    <!-- Container principal -->
+
+    <div class="row justify-content-center">
+        <!-- Centraliza o conteúdo -->
+
+        <div class="col-lg-10">
+            <!-- Define largura -->
+
+            <h4 class="mb-4 text-secondary fw-light">
+                Gestão de Residentes
+            </h4>
+            <!-- Título -->
+
+            <div class="card mb-5 border-0 shadow-sm">
+                <!-- Card do formulário -->
+
+                <div class="card-header bg-white py-3 border-bottom-0">
+                    <!-- Cabeçalho -->
+                    <h6 class="mb-0 fw-bold text-muted">
+                        CADASTRAR NOVO MORADOR
+                    </h6>
+                </div>
+
+                <div class="card-body p-4">
+                    <!-- Corpo -->
+
+                    <form action="/adicionar" method="POST" class="row g-3">
+                        <!-- Formulário -->
+
+                        <div class="col-md-6">
+                            <!-- Campo Nome -->
+                            <label class="form-label small text-uppercase text-muted fw-bold">
+                                Nome Completo
+                            </label>
+
+                            <input 
+                                type="text" 
+                                name="Nome" 
+                                class="form-control bg-light border-0 py-2"
+                                placeholder="Digite o nome..." 
+                                required
+                            >
+                        </div>
+
+                        <div class="col-md-4">
+                            <!-- Campo CPF -->
+                            <label class="form-label small text-uppercase text-muted fw-bold">
+                                CPF
+                            </label>
+
+                            <input 
+                                type="text" 
+                                name="CPF" 
+                                class="form-control bg-light border-0 py-2"
+                                placeholder="000.000.000-00" 
+                                required
+                            >
+                        </div>
+
+                        <div class="col-md-2 d-flex align-items-end">
+                            <!-- Botão -->
+                            <button 
+                                type="submit" 
+                                class="btn btn-outline-dark w-100 py-2 fw-bold"
+                            >
+                                Salvar
+                            </button>
+                        </div>
+
+                    </form>
+                    <!-- Fim do formulário -->
+
+                </div>
+                <!-- Fim do body -->
+
+            </div>
+            <!-- Fim do card -->
+
+        </div>
+    </div>
+</div>
+
+<div class="card border-0 shadow-sm">
+    <!-- Card principal -->
+
+    <div class="card-header bg-white py-3 border-bottom-0">
+        <!-- Cabeçalho do card -->
+        <h6 class="mb-0 fw-bold text-muted">MORADORES ATIVOS</h6>
+    </div>
+
+    <div class="card-body p-0">
+        <!-- Corpo do card -->
+
+        <div class="table-responsive">
+            <!-- Deixa tabela responsiva -->
+
+            <table class="table table-hover align-middle mb-0">
+                <!-- Tabela Bootstrap -->
+
+                <thead class="table-light">
+                    <!-- Cabeçalho da tabela -->
+                    <tr class="text-muted small text-uppercase">
+                        <th class="ps-4 py-3">ID</th> <!-- Coluna ID -->
+                        <th class="py-3">Nome do Residente</th> <!-- Coluna Nome -->
+                        <th class="py-3 text-end pe-4">CPF</th> <!-- Coluna CPF -->
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <!-- Corpo da tabela (dados dinâmicos) -->
+
+                    <% if (dados) { %>
+                        <!-- Verifica se existe lista -->
+
+                        <% dados.forEach(pessoa => { %>
+                            <!-- Loop em cada pessoa -->
+
+                            <tr>
+                                <!-- Linha da tabela -->
+
+                                <td class="ps-4 text-muted small">
+                                    #<%= pessoa.id %>
+                                </td>
+                                <!-- ID -->
+
+                                <td class="fw-semibold text-dark">
+                                    <%= pessoa.Nome %>
+                                </td>
+                                <!-- Nome -->
+
+                                <td class="text-end pe-4 text-secondary">
+                                    <%= pessoa.CPF %>
+                                </td>
+                                <!-- CPF -->
+
+                            </tr>
+
+                        <% }) %>
+                        <!-- Fim do loop -->
+
+                    <% } else { %>
+                        <!-- Caso não tenha dados -->
+
                         <tr>
-                            <th>ID</th>
-                            <th>Nome</th>
-                            <th>CPF</th>
+                            <td colspan="3" class="text-center py-5 text-muted">
+                                <p class="mb-0">Nenhum registro encontrado.</p>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        <% if (dados && dados.length> 0) { %>
-                            <% dados.forEach(pessoa=> { %>
-                                <tr>
-                                    <td>
-                                        <%= pessoa.id %>
-                                    </td>
-                                    <td>
-                                        <%= pessoa.Nome %>
-                                    </td>
-                                    <td>
-                                        <%= pessoa.CPF %>
-                                    </td>
-                                 
-                                </tr>
-                                <% }) %>
-                                    <% } else { %>
-                                        <tr>
-                                            <td colspan="4" class="text-center">Nenhuma pessoa cadastrada.</td>
-                                        </tr>
-                                        <% } %>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
 
+                    <% } %>
+                    <!-- Fim do if -->
+
+                </tbody>
+
+            </table>
+            <!-- Fim da tabela -->
+
+        </div>
+        <!-- Fim do responsivo -->
+
+    </div>
+    <!-- Fim do body -->
+
+</div>
+<!-- Fim do card -->               
+
+<script>
+    console.log("INLINE FUNCIONA");
+</script>
+<script src="/js/alert.js"></script>
 </body>
 
 </html>

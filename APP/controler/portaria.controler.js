@@ -6,7 +6,7 @@ const mostrarinfo = (req, res) => {
     portariaModel.ReadAllPortaria()
         .then((dados) => {
             // Passa os dados do banco para o EJS sob o nome 'dados'
-            res.render("index", { title: "principal", dados: dados });
+            res.render("index", { title: "principal", dados: dados,  query: req.query  });
         })
         .catch(err => res.status(500).send("Erro ao carregar a home: " + err)); 
 }
@@ -16,13 +16,13 @@ const mostrarinfo = (req, res) => {
 const criarinfo = (req, res) => {
     const { Nome, CPF } = req.body; // Desestrutura o que veio do formulário
 
-    portariaModel.CreateMorador(Nome, CPF)
+    portariaModel.CreateMorador(Nome, CPF)  // novo morador na lista
         .then(() => {
-            res.redirect("/"); // Sucesso? Volta pra home pra ver o novo morador na lista
+            res.redirect("/?sucesso=Morador cadastrado com sucesso");
         })
         .catch(err => {
             console.error(err);
-            res.status(500).send("Erro ao salvar morador.");
+            res.redirect("/?erro=Erro ao salvar morador");
         });
 }
 
@@ -76,7 +76,7 @@ const carregarPaginaRegistro = async (req, res) => {
 }
 
 // === RELATÓRIO DE ACESSOS ===
-// Mostra quem entrou e saiu usando o JOIN que a gente fez
+// Mostra quem entrou e saiu usando o JOIN
 const exibirHistorico = async (req, res) => {
     try {
         const listaAcessos = await portariaModel.ReadAllAcessos();

@@ -1,49 +1,136 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
+    <!-- Configuração básica -->
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrar Acesso</title>
+
+    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+      <link rel="stylesheet" href="/css/registro.css">
+
 </head>
-<body class="container mt-5">
-    <div class="card shadow">
-        <div class="card-header bg-primary text-white">
-            <h2>Registrar Entrada ou Saída</h2>
+
+<body>
+
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm mb-5">
+        <div class="container">
+
+            <!-- Logo -->
+            <a class="navbar-brand fw-bold text-dark" href="/">
+                <span class="text-secondary">Portaria</span>Digital
+            </a>
+
+            <!-- Links -->
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link text-muted" href="/">Moradores</a>
+                <a class="nav-link active fw-semibold" href="/registro">Novo Registro</a>
+                <a class="nav-link text-muted" href="/historico">Histórico</a>
+            </div>
+
         </div>
-        <div class="card-body">
-            <p>Selecione o morador e a ação desejada:</p>
-            
-            <form id="formAcesso" method="POST">
-                <div class="mb-4">
-                    <label for="id_morador" class="form-label">Morador:</label>
-                    <select name="id_morador" id="id_morador" class="form-select form-select-lg" required>
-                        <option value="" disabled selected>Escolha um morador...</option>
-                        <% moradores.forEach(morador => { %>
-                            <option value="<%= morador.id %>"><%= morador.Nome %> (CPF: <%= morador.CPF %>)</option>
-                        <% }) %>
-                    </select>
+    </nav>
+
+    <!-- Conteúdo -->
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+
+                <!-- Card -->
+                <div class="card p-4">
+
+                    <div class="card-body">
+
+                        <!-- Título -->
+                        <h4 class="mb-2 fw-bold text-dark">Registrar Fluxo</h4>
+                        <p class="text-muted mb-4">
+                            Selecione o morador para validar a entrada ou saída.
+                        </p>
+
+                        <!-- Form -->
+                        <form id="formAcesso" method="POST">
+
+                            <!-- Select moradores -->
+                            <div class="mb-4">
+                                <label class="form-label small text-uppercase text-muted fw-bold">
+                                    Morador
+                                </label>
+
+                                <select 
+                                    name="id_morador" 
+                                    id="id_morador" 
+                                    class="form-select form-select-lg py-3"
+                                    style="font-size: 1rem;" 
+                                    required
+                                >
+                                    <option value="" disabled selected>
+                                        Escolha um morador...
+                                    </option>
+
+                                    <% moradores.forEach(morador => { %>
+                                        <option value="<%= morador.id %>">
+                                            <%= morador.Nome %> (CPF: <%= morador.CPF %>)
+                                        </option>
+                                    <% }) %>
+
+                                </select>
+                            </div>
+
+                            <!-- Botões -->
+                            <div class="row g-3">
+
+                                <!-- Entrada -->
+                                <div class="col-6">
+                                    <button 
+                                        type="submit" 
+                                        onclick="enviarPara('/entrada')" 
+                                        class="btn btn-entrada w-100 py-3 fw-bold"
+                                    >
+                                        ENTRADA
+                                    </button>
+                                </div>
+
+                                <!-- Saída -->
+                                <div class="col-6">
+                                    <button 
+                                        type="submit" 
+                                        onclick="enviarPara('/saida')" 
+                                        class="btn btn-saida w-100 py-3 fw-bold"
+                                    >
+                                        SAÍDA
+                                    </button>
+                                </div>
+
+                            </div>
+
+                        </form>
+                    </div>
+
+                    <!-- Rodapé -->
+                    <div class="card-footer bg-white border-top-0 text-center mt-3">
+                        <a href="/" class="btn btn-link btn-sm text-decoration-none text-muted">
+                            ← Voltar para a listagem
+                        </a>
+                    </div>
+
                 </div>
 
-                <div class="d-grid gap-3 d-md-flex justify-content-md-center">
-                    <button type="submit" onclick="enviarPara('/entrada')" class="btn btn-success btn-lg px-5">
-                        Registrar ENTRADA
-                    </button>
-                    <button type="submit" onclick="enviarPara('/saida')" class="btn btn-danger btn-lg px-5">
-                        Registrar SAÍDA
-                    </button>
-                </div>
-            </form>
-        </div>
-        <div class="card-footer">
-            <a href="/" class="btn btn-secondary">Voltar para Listagem</a>
+            </div>
         </div>
     </div>
 
+    <!-- Script -->
     <script>
-        // Função simples para mudar a rota de destino dependendo do botão clicado
+        // Define rota dinamicamente
         function enviarPara(rota) {
             document.getElementById('formAcesso').action = rota;
         }
     </script>
+ 
+
 </body>
 </html>
