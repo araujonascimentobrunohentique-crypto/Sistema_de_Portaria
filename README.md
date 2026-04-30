@@ -14,13 +14,13 @@ CREATE TABLE Moradores (
 
 -- 3. Criar a tabela de Acessos (A "Filha")
 -- A Foreign Key garante que não exista acesso para um morador que não existe.
-CREATE TABLE Acessos (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    Pessoas_id INT,
-    data_entrada DATETIME DEFAULT CURRENT_TIMESTAMP,
-    data_saida DATETIME NULL,
-    FOREIGN KEY (Pessoas_id) REFERENCES Moradores(id) ON DELETE CASCADE
-);
+    CREATE TABLE Acessos (
+        id INT PRIMARY KEY AUTO_INCREMENT,
+        Pessoas_id INT,
+        data_entrada DATETIME DEFAULT CURRENT_TIMESTAMP,
+        data_saida DATETIME NULL,
+        FOREIGN KEY (Pessoas_id) REFERENCES Moradores(id) ON DELETE CASCADE
+    );
 
 # 🏢 Sistema de Portaria Digital
 

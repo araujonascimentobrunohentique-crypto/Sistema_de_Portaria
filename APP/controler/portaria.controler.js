@@ -6,9 +6,9 @@ const mostrarinfo = (req, res) => {
     portariaModel.ReadAllPortaria()
         .then((dados) => {
             // Passa os dados do banco para o EJS sob o nome 'dados'
-            res.render("index", { title: "principal", dados: dados,  query: req.query  });
+            res.render("index", { title: "principal", dados: dados, query: req.query });
         })
-        .catch(err => res.status(500).send("Erro ao carregar a home: " + err)); 
+        .catch(err => res.status(500).send("Erro ao carregar a home: " + err));
 }
 
 // === CADASTRO DE MORADOR ===
@@ -30,10 +30,10 @@ const criarinfo = (req, res) => {
 // A lógica aqui é: só entra se não estiver lá dentro
 const registrarEntrada = async (req, res) => {
     const { id_morador } = req.body;
-    
+
     // Chama o model pra ver se tem algum registro sem data_saida
     const jaEstaDentro = await portariaModel.buscarAcessoAberto(id_morador);
-    
+
     if (jaEstaDentro) {
         // Se o cara já tá no prédio, barra a entrada duplicada
         return res.status(400).send("Este morador já possui uma entrada ativa. Registre a saída primeiro!");
@@ -49,10 +49,10 @@ const registrarEntrada = async (req, res) => {
 // Só sai se tiver entrado antes (óbvio, né?)
 const registrarSaida = async (req, res) => {
     const { id_morador } = req.body;
-    
+
     // Verifica se existe uma entrada aberta pra esse morador
     const estaNoPredio = await portariaModel.buscarAcessoAberto(id_morador);
-    
+
     if (!estaNoPredio) {
         // Se não tem entrada, não tem como dar saída
         return res.status(400).send("Este morador não está no prédio (não possui entrada aberta).");
@@ -74,13 +74,24 @@ const carregarPaginaRegistro = async (req, res) => {
         res.status(500).send("Erro ao carregar página de registro.");
     }
 }
-
-// === RELATÓRIO DE ACESSOS ===
-// Mostra quem entrou e saiu usando o JOIN
+// === RELATÓRIO DE ACESSOS (COM BUSCA) ===
 const exibirHistorico = async (req, res) => {
     try {
-        const listaAcessos = await portariaModel.ReadAllAcessos();
-        res.render("historico", { acessos: listaAcessos });
+      const termoBusca = req.query.busca || ""; // Se for undefined, vira string vazia
+        let listaAcessos;
+
+        if (termoBusca) {
+            // Se o usuário digitou algo, chama o novo método de busca
+            listaAcessos = await portariaModel.SearchAcessosByName(termoBusca);
+        } else {
+            // Se não, mantém o comportamento padrão de listar tudo
+            listaAcessos = await portariaModel.ReadAllAcessos();
+        }
+        // Passamos 'acessos' e também a variável 'busca' para o EJS não dar erro
+        res.render("historico", {
+            acessos: listaAcessos,
+            busca: termoBusca
+        });
     } catch (err) {
         console.error(err);
         res.status(500).send("Erro ao carregar histórico.");

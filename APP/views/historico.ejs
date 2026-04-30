@@ -9,9 +9,9 @@
 
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-      <link rel="stylesheet" href="/css/historico.css">
+    <link rel="stylesheet" href="/css/historico.css">
 
-   
+
 </head>
 
 <body>
@@ -28,7 +28,7 @@
             <!-- Links -->
             <div class="navbar-nav ms-auto">
                 <a class="nav-link text-muted" href="/">Moradores</a>
-                <a class="nav-link text-muted" href="/registro">Novo Registro</a>
+                <a class="nav-link text-muted" href="/registro">Registrar Entrada/Saída</a>
                 <a class="nav-link active fw-semibold" href="/historico">Histórico</a>
             </div>
 
@@ -39,10 +39,28 @@
     <div class="container">
 
         <!-- Título + botão -->
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h4 class="text-secondary fw-light mb-0">Logs de Atividade</h4>
-            <a href="/registro" class="btn btn-sm btn-outline-dark px-3">Novo Registro</a>
-        </div>
+        <div class="row align-items-center mb-4">
+    <div class="col-md-4">
+        <h4 class="text-secondary fw-light mb-0">Logs de Atividade</h4>
+    </div>
+
+    <div class="col-md-5">
+        <form action="/historico" method="GET" class="d-flex">
+            <input type="text" name="busca" class="form-control form-control-sm me-2"
+                placeholder="Pesquisar por Nome..." 
+                value="<%= (typeof busca !== 'undefined') ? busca : '' %>">
+            <button type="submit" class="btn btn-sm btn-secondary">🔍</button>
+            
+            <% if (typeof busca !== 'undefined' && busca !== '') { %>
+                <a href="/historico" class="btn btn-sm btn-link text-decoration-none">Limpar</a>
+            <% } %>
+        </form>
+    </div>
+
+    <div class="col-md-3 text-end">
+        <a href="/registro" class="btn btn-sm btn-outline-dark px-3">Novo Registro</a>
+    </div>
+</div>
 
         <!-- Card da tabela -->
         <div class="card border-0 shadow-sm">
@@ -65,10 +83,10 @@
                         <!-- Corpo -->
                         <tbody>
 
-                            <% if (acessos && acessos.length > 0) { %>
+                            <% if (acessos && acessos.length> 0) { %>
                                 <!-- Se tiver dados -->
 
-                                <% acessos.forEach(acesso => { %>
+                                <% acessos.forEach(acesso=> { %>
                                     <!-- Loop -->
 
                                     <tr>
@@ -82,24 +100,15 @@
 
                                         <!-- Entrada -->
                                         <td class="text-center text-muted small">
-                                            <%= new Date(acesso.data_entrada).toLocaleString('pt-BR', {
-                                                day: '2-digit',
-                                                month: '2-digit',
-                                                hour: '2-digit',
-                                                minute: '2-digit'
-                                            }) %>
+                                            <%= new Date(acesso.data_entrada).toLocaleString('pt-BR', { day: '2-digit' ,
+                                                month: '2-digit' , hour: '2-digit' , minute: '2-digit' }) %>
                                         </td>
 
                                         <!-- Saída -->
                                         <td class="text-center text-muted small">
-                                            <%= acesso.data_saida
-                                                ? new Date(acesso.data_saida).toLocaleString('pt-BR', {
-                                                    day: '2-digit',
-                                                    month: '2-digit',
-                                                    hour: '2-digit',
-                                                    minute: '2-digit'
-                                                })
-                                                : '---' %>
+                                            <%= acesso.data_saida ? new Date(acesso.data_saida).toLocaleString('pt-BR',
+                                                { day: '2-digit' , month: '2-digit' , hour: '2-digit' ,
+                                                minute: '2-digit' }) : '---' %>
                                         </td>
 
                                         <!-- Status -->
@@ -108,27 +117,27 @@
                                                 <span class="badge badge-in px-3 py-2 rounded-pill">
                                                     No Prédio
                                                 </span>
-                                            <% } else { %>
-                                                <span class="badge badge-out px-3 py-2 rounded-pill">
-                                                    Saiu
-                                                </span>
-                                            <% } %>
+                                                <% } else { %>
+                                                    <span class="badge badge-out px-3 py-2 rounded-pill">
+                                                        Saiu
+                                                    </span>
+                                                    <% } %>
                                         </td>
 
                                     </tr>
 
-                                <% }) %>
+                                    <% }) %>
 
-                            <% } else { %>
-                                <!-- Sem dados -->
+                                        <% } else { %>
+                                            <!-- Sem dados -->
 
-                                <tr>
-                                    <td colspan="4" class="text-center py-5 text-muted">
-                                        Nenhum acesso registrado no histórico.
-                                    </td>
-                                </tr>
+                                            <tr>
+                                                <td colspan="4" class="text-center py-5 text-muted">
+                                                    Nenhum acesso registrado no histórico.
+                                                </td>
+                                            </tr>
 
-                            <% } %>
+                                            <% } %>
 
                         </tbody>
                     </table>
@@ -147,4 +156,5 @@
     </div>
 
 </body>
+
 </html>

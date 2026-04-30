@@ -10,6 +10,20 @@ class portaria {
         const dados = await executarQuery(query);
         return dados;
     } 
+    
+    // === PESQUISAR NO HISTÓRICO POR NOME ===
+    // Filtra os acessos usando o nome do morador via LIKE
+    static async SearchAcessosByName(nome) {
+        const query = `
+            SELECT A.id, M.Nome, A.data_entrada, A.data_saida 
+            FROM Acessos A 
+            INNER JOIN Moradores M ON A.Pessoas_id = M.id 
+            WHERE M.Nome LIKE ? 
+            ORDER BY A.data_entrada DESC
+        `;
+        // O valor entre % % permite encontrar o nome em qualquer parte do texto
+        return await executarQuery(query, [`%${nome}%`]);
+    }
 
     // === CADASTRAR MORADOR ===
     // Salva o novo vizinho. O '?' evita que algum engraçadinho tente hackear via SQL Injection
