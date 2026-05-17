@@ -31,37 +31,50 @@ const criarinfo = (req, res) => {
 const registrarEntrada = async (req, res) => {
     const { id_morador } = req.body;
 
-    // Chama o model pra ver se tem algum registro sem data_saida
-    const jaEstaDentro = await portariaModel.buscarAcessoAberto(id_morador);
+    try {
+        // Chama o model pra ver se tem algum registro sem data_saida
+        const jaEstaDentro = await portariaModel.buscarAcessoAberto(id_morador);
 
-    if (jaEstaDentro) {
-        // Se o cara já tá no prédio, barra a entrada duplicada
-        return res.status(400).send("Este morador já possui uma entrada ativa. Registre a saída primeiro!");
+        if (jaEstaDentro) {
+            // Se o cara já tá no prédio, redireciona com a mensagem de erro
+           // Guarda a mensagem no flash e redireciona limpo![]
+            req.flash('erro', 'Este morador já possui uma entrada ativa. Registre a saída primeiro!');
+            return res.redirect("/registro");
+        }
+
+        // Se passou na checagem, carimba a entrada
+        await portariaModel.regisEntrada(id_morador);
+        res.redirect("/"); // Sucesso vai para a home
+
+    } catch (err) {
+        // Se der erro no banco (catch), manda para a tela de registro com o erro
+       req.flash('erro', 'Erro ao registrar entrada no banco de dados.');
+        res.redirect("/registro");
     }
-
-    // Se passou na checagem, carimba a entrada
-    portariaModel.regisEntrada(id_morador)
-        .then(() => res.redirect("/"))
-        .catch(err => res.status(500).send("Erro ao registrar entrada."));
 }
 
 // === REGISTRO DE SAÍDA ===
-// Só sai se tiver entrado antes (óbvio, né?)
 const registrarSaida = async (req, res) => {
     const { id_morador } = req.body;
 
-    // Verifica se existe uma entrada aberta pra esse morador
-    const estaNoPredio = await portariaModel.buscarAcessoAberto(id_morador);
+    try {
+        // Verifica se existe uma entrada aberta pra esse morador
+        const estaNoPredio = await portariaModel.buscarAcessoAberto(id_morador);
 
-    if (!estaNoPredio) {
-        // Se não tem entrada, não tem como dar saída
-        return res.status(400).send("Este morador não está no prédio (não possui entrada aberta).");
+        if (!estaNoPredio) {
+            // Se não tem entrada, redireciona avisando
+            req.flash('erro', 'Este morador não está no prédio (não possui entrada aberta).');
+            return res.redirect("/registro");
+        }
+
+        // Tudo ok? Atualiza o registro com a data_saida de agora
+        await portariaModel.regisSaida(id_morador);
+        res.redirect("/"); // Sucesso vai para a home
+
+    } catch (err) {
+        req.flash('erro', 'Erro ao registrar saída no banco de dados.');
+        res.redirect("/registro");
     }
-
-    // Tudo ok? Atualiza o registro com a data_saida de agora
-    portariaModel.regisSaida(id_morador)
-        .then(() => res.redirect("/"))
-        .catch(err => res.status(500).send("Erro ao registrar saída."));
 }
 
 // === PÁGINA DE SELEÇÃO ===
@@ -77,7 +90,7 @@ const carregarPaginaRegistro = async (req, res) => {
 // === RELATÓRIO DE ACESSOS (COM BUSCA) ===
 const exibirHistorico = async (req, res) => {
     try {
-      const termoBusca = req.query.busca || ""; // Se for undefined, vira string vazia
+        const termoBusca = req.query.busca || ""; // Se for undefined, vira string vazia
         let listaAcessos;
 
         if (termoBusca) {

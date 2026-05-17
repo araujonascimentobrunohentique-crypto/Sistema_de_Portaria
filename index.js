@@ -1,9 +1,11 @@
 // 1. Importação de bibliotecas fundamentais
 const http = require("http");
-const express = require("express"); 
+const express = require("express");
 const morgan = require("morgan");
 const path = require("path"); // Necessário para gerenciar caminhos de pastas
 const app = express();
+const session = require('express-session');
+const flash = require('connect-flash');
 require('dotenv').config(); // Carrega as variáveis de ambiente do arquivo .env
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); // ESSA LINHA É OBRIGATÓRIA!
@@ -16,10 +18,26 @@ const portariaroutes = require("./routes/portaria.route");
 app.use(morgan("dev")); // Loga no console todas as requisições (GET, POST, etc)
 app.use(express.urlencoded({ extended: true })); // Permite que o Express leia dados vindos de formulários
 
+// Configuração da sessão (obrigatória para o flash)
+app.use(session({
+    secret: 'Eae se ta BOM?', // Pode ser qualquer texto
+    resave: false,
+    saveUninitialized: true
+}));
+// Ativa o flash
+app.use(flash());
+
 // Define que as páginas (views) estão dentro da pasta APP/views
-app.set("views", path.join(__dirname, "APP", "views")); 
+app.set("views", path.join(__dirname, "APP", "views"));
 app.set("view engine", "ejs"); // Define o EJS como motor de renderização HTML
 app.use(express.static("./public")); // Define a pasta para arquivos estáticos (CSS, imagens)
+
+// Middleware para deixar as mensagens globais nas views (facilita a vida do cara)
+app.use((req, res, next) => {
+  res.locals.erro = req.flash('erro') || [];
+  res.locals.sucesso = req.flash('sucesso') || [];
+  next();
+});
 
 // 4. Definição da Porta (vinda do .env)
 const porta = Number(process.env.PORTA);

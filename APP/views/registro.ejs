@@ -14,7 +14,19 @@
 </head>
 
 <body>
-
+ 
+ <!-- caso ele registre uma entrada ou saida correta -->
+   <% if (typeof erro !== 'undefined' && erro && erro.length > 0) { %>
+    <div class="alert alert-danger alert-dismissible fade show">
+        <%= erro %>
+    </div>
+<% } %>
+<!-- caso não aparece sucesso -->
+<% if (typeof sucesso !== 'undefined' && sucesso && sucesso.length > 0) { %>
+    <div class="alert alert-success alert-dismissible fade show">
+        <%= sucesso %>
+    </div>
+<% } %>
 
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm mb-5">
