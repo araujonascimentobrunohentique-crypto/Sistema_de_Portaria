@@ -1,3 +1,5 @@
+Grupo:Bruno Henrique, Guilherme Iscaro, Francisco Kaique e Nicolas gustavo.
+
 # Sistema_de_Portaria
 
 -- 1. Criar o banco de dados (se não existir)
